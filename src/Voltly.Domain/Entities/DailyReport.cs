@@ -8,7 +8,7 @@ namespace Voltly.Domain.Entities;
 public class DailyReport : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id { get; init; }
+    public long Id { get; set; }
 
     [Required]  public long EquipmentId { get; set; }
     public Equipment Equipment { get; set; } = null!;

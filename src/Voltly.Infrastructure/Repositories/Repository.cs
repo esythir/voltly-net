@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Voltly.Domain;
+using System.Linq.Expressions;
+using Voltly.Application.Abstractions;
 using Voltly.Domain.Entities;
 using Voltly.Infrastructure.Persistence;
 
@@ -8,28 +9,29 @@ namespace Voltly.Infrastructure.Repositories;
 public abstract class Repository<T> : IRepository<T> where T : class, IEntity
 {
     protected readonly VoltlyDbContext _ctx;
-    protected readonly DbSet<T> _db;
+    protected readonly DbSet<T> _set;
 
     protected Repository(VoltlyDbContext ctx)
     {
         _ctx = ctx;
-        _db = ctx.Set<T>();
+        _set = ctx.Set<T>();
     }
 
-    public async Task AddAsync(T entity, CancellationToken ct = default) => await _db.AddAsync(entity, ct);
+    public Task AddAsync(T entity, CancellationToken ct = default) =>
+        _set.AddAsync(entity, ct).AsTask();
 
-    public async Task<T?> GetAsync(long id, CancellationToken ct = default) =>
-        await _db.FirstOrDefaultAsync(e => e.Id == id, ct);
+    public Task<T?> GetAsync(long id, CancellationToken ct = default) =>
+        _set.FirstOrDefaultAsync(e => e.Id == id, ct);
 
     public IQueryable<T> Query(Expression<Func<T, bool>>? filter = null, bool tracking = false)
     {
-        var query = tracking ? _db : _db.AsNoTracking();
+        var query = tracking ? _set : _set.AsNoTracking();
         return filter is null ? query : query.Where(filter);
     }
 
     public Task RemoveAsync(T entity)
     {
-        _db.Remove(entity);
+        _set.Remove(entity);
         return Task.CompletedTask;
     }
 }

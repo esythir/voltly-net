@@ -7,7 +7,7 @@ namespace Voltly.Domain.Entities;
 public class Sensor : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id { get; init; }
+    public long Id { get; set; }
 
     [Required, MaxLength(100)] public string SerialNumber { get; set; } = null!;
     [Required, MaxLength(80)]  public string Type         { get; set; } = null!;

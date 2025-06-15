@@ -7,7 +7,7 @@ namespace Voltly.Domain.Entities;
 public class EnergyReading : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id { get; init; }
+    public long Id { get; set; }
 
     [Required] public long   SensorId     { get; set; }
     public   Sensor Sensor  { get; set; } = null!;

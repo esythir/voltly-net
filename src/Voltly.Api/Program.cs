@@ -1,32 +1,32 @@
 using Mapster;
 using MapsterMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Voltly.Application.Abstractions;
+using Voltly.Application.Mapping;
 using Voltly.Infrastructure.Persistence;
-using Voltly.Domain;
 using Voltly.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var cfg = builder.Configuration;
 
 // DbContext
 builder.Services.AddDbContext<VoltlyDbContext>(opt =>
-{
     opt.UseOracle(cfg.GetConnectionString("Oracle"))
-        .UseLazyLoadingProxies();
-});
+        .UseLazyLoadingProxies());
 
 // Mapster
-var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
-Voltly.Application.Mapping.MapsterConfig.Configure(typeAdapterConfig);
-builder.Services.AddSingleton(typeAdapterConfig);
+var mapsterCfg = TypeAdapterConfig.GlobalSettings;
+MapsterConfig.Configure(mapsterCfg);
+builder.Services.AddSingleton(mapsterCfg);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 
-// DI genéricos
+// MediatR
+builder.Services.AddMediatR(typeof(MapsterConfig).Assembly);
+
+// DI Repositories & UoW
 builder.Services.Scan(scan => scan
-    .FromAssemblies(
-        typeof(Voltly.Infrastructure.Repositories.Repository<>).Assembly,
-        typeof(Voltly.Application.Mapping.MapsterConfig).Assembly)
+    .FromAssemblies(typeof(Repository<>).Assembly)
     .AddClasses(c => c.AssignableTo(typeof(IRepository<>)))
     .AsImplementedInterfaces()
     .WithScopedLifetime());
@@ -41,5 +41,4 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
-
 app.Run();

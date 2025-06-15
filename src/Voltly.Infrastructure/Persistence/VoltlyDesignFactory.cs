@@ -4,22 +4,21 @@ using Microsoft.Extensions.Configuration;
 
 namespace Voltly.Infrastructure.Persistence;
 
-public class VoltlyDesignFactory : IDesignTimeDbContextFactory<VoltlyDbContext>
+public sealed class VoltlyDesignFactory
+    : IDesignTimeDbContextFactory<VoltlyDbContext>
 {
     public VoltlyDbContext CreateDbContext(string[] args)
     {
-        var cfg = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.Development.json")
-            .AddEnvironmentVariables()
+        IConfigurationRoot cfg = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.Development.json", optional: false)
             .Build();
 
-        var opt = new DbContextOptionsBuilder<VoltlyDbContext>()
-            .UseOracle(cfg.GetConnectionString("Oracle"),
-                o => o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName))
+        var options = new DbContextOptionsBuilder<VoltlyDbContext>()
+            .UseOracle(cfg.GetConnectionString("VoltlyOracle"))
             .UseLazyLoadingProxies()
-            .EnableSensitiveDataLogging()
             .Options;
 
-        return new VoltlyDbContext(opt);
+        return new VoltlyDbContext(options);
     }
 }

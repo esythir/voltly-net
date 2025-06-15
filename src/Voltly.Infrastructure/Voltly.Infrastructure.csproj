@@ -1,47 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- EF Core Oracle -->
-    <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-    <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <!-- Lazy-loading proxies -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataSeed\" />
-    <Folder Include="Persistence\Migrations\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- ORM -->
-    <PackageReference Include="Oracle.EntityFrameworkCore" Version="8.21.1100" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-
-    <!-- Mapster SourceGen -->
-    <PackageReference Include="Mapster"                Version="8.5.0" />
-    <PackageReference Include="Mapster.SourceGenerator" Version="8.5.0" PrivateAssets="all" />
-
-    <!-- IoC helper -->
-    <PackageReference Include="Scrutor" Version="4.2.0" />
-  </ItemGroup>
-
 </Project>

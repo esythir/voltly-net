@@ -1,25 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.5.0" />
-  </ItemGroup>
+    <!-- ORMs -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" />
+    <PackageVersion Include="Oracle.EntityFrameworkCore" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
-  </ItemGroup>
+    <!-- CQRS / Mapping -->
+    <PackageVersion Include="MediatR" />
+    <PackageVersion Include="Mapster" />
+    <PackageVersion Include="Mapster.SourceGenerator" />
 
-  <ItemGroup>
-    <Folder Include="Behaviours\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Features\Equipments\Commands\" />
-    <Folder Include="Features\Equipments\Queries\" />
-    <Folder Include="Features\Equipments\Validators\" />
-  </ItemGroup>
+    <!-- Infra / Helpers -->
+    <PackageVersion Include="Scrutor" />
+    <PackageVersion Include="FluentValidation" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" />
+    <PackageVersion Include="LazyCache" />
 
+    <!-- Testes -->
+    <PackageVersion Include="xunit" />
+    <PackageVersion Include="xunit.runner.visualstudio" />
+    <PackageVersion Include="FluentAssertions" />
+    <PackageVersion Include="Testcontainers" />
+  </ItemGroup>
 </Project>

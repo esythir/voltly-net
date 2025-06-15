@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "WxvtSOweMpk=",
+  "success": true,
+  "projectFilePath": "/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Application/Voltly.Application.csproj",
+  "expectedPackageFiles": [
+    "/Users/ada/.nuget/packages/ardalis.guardclauses/5.0.0/ardalis.guardclauses.5.0.0.nupkg.sha512",
+    "/Users/ada/.nuget/packages/mediatr/12.5.0/mediatr.12.5.0.nupkg.sha512",
+    "/Users/ada/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",
+    "/Users/ada/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voltly.Api", "Voltly.Api\Voltly.Api.csproj", "{75624946-6AAD-4B96-8A77-6DF27271A97D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voltly.Application", "Voltly.Application\Voltly.Application.csproj", "{6FBC457E-153A-41E6-ACB3-01C18785D171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voltly.Domain", "Voltly.Domain\Voltly.Domain.csproj", "{9B32EB01-3CC6-4BA5-8CEE-87FAAEF8B44E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voltly.Infrastructure", "Voltly.Infrastructure\Voltly.Infrastructure.csproj", "{45FC2D2B-82BD-446B-89FF-65FCD1738DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voltly.Tests", "Voltly.Tests\Voltly.Tests.csproj", "{BCA6FBB8-A871-4A82-BEE9-06FE1D5BC29D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75624946-6AAD-4B96-8A77-6DF27271A97D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75624946-6AAD-4B96-8A77-6DF27271A97D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75624946-6AAD-4B96-8A77-6DF27271A97D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75624946-6AAD-4B96-8A77-6DF27271A97D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FBC457E-153A-41E6-ACB3-01C18785D171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FBC457E-153A-41E6-ACB3-01C18785D171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FBC457E-153A-41E6-ACB3-01C18785D171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FBC457E-153A-41E6-ACB3-01C18785D171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B32EB01-3CC6-4BA5-8CEE-87FAAEF8B44E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B32EB01-3CC6-4BA5-8CEE-87FAAEF8B44E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B32EB01-3CC6-4BA5-8CEE-87FAAEF8B44E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B32EB01-3CC6-4BA5-8CEE-87FAAEF8B44E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45FC2D2B-82BD-446B-89FF-65FCD1738DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45FC2D2B-82BD-446B-89FF-65FCD1738DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45FC2D2B-82BD-446B-89FF-65FCD1738DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45FC2D2B-82BD-446B-89FF-65FCD1738DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA6FBB8-A871-4A82-BEE9-06FE1D5BC29D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA6FBB8-A871-4A82-BEE9-06FE1D5BC29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA6FBB8-A871-4A82-BEE9-06FE1D5BC29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA6FBB8-A871-4A82-BEE9-06FE1D5BC29D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

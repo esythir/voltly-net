@@ -1,0 +1,12 @@
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/bin/Debug/net8.0/Voltly.Domain.deps.json
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/bin/Debug/net8.0/Voltly.Domain.dll
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/bin/Debug/net8.0/Voltly.Domain.pdb
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.csproj.AssemblyReference.cache
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.AssemblyInfoInputs.cache
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.AssemblyInfo.cs
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.csproj.CoreCompileInputs.cache
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.dll
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/refint/Voltly.Domain.dll
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/Voltly.Domain.pdb
+/Users/ada/Documents/Dev/FIAP/M04CH07/Voltly/Voltly.Domain/obj/Debug/net8.0/ref/Voltly.Domain.dll

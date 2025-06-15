@@ -3,20 +3,16 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
-    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
-    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Mapster" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Swashbuckle.AspNetCore" />
-    <PackageReference Include="Mapster.SourceGenerator" PrivateAssets="all" />
+    <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
   </ItemGroup>
 
 </Project>

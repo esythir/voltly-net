@@ -8,12 +8,12 @@
         <PackageVersion Include="Scrutor" Version="3.0.0" />
 
         <!-- Testes -->
-        <PackageVersion Include="Microsoft.NET.Test.Sdk"    Version="17.8.0" />
-        <PackageVersion Include="xunit"                     Version="2.8.0"  />
-        <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0"  />
-        <PackageVersion Include="FluentAssertions"          Version="7.0.0"  />
-        <PackageVersion Include="Moq"                       Version="4.20.72"/>
-        <PackageVersion Include="coverlet.collector"        Version="6.0.2"  />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk"      Version="17.8.0" />
+        <PackageVersion Include="xunit"                       Version="2.8.0"  />
+        <PackageVersion Include="xunit.runner.visualstudio"   Version="2.8.0"  />
+        <PackageVersion Include="FluentAssertions"            Version="7.0.0"  />
+        <PackageVersion Include="Moq"                         Version="4.20.72"/>
+        <PackageVersion Include="coverlet.collector"          Version="6.0.2"  />
 
         <!-- Guard / validation -->
         <PackageVersion Include="Ardalis.GuardClauses"        Version="4.3.0"  />
@@ -29,7 +29,7 @@
         <PackageVersion Include="Mapster" Version="7.4.0" />
 
         <!-- Cache -->
-        <PackageVersion Include="LazyCache" Version="2.4.0" />
+        <PackageVersion Include="LazyCache" Version="2.4.0"  />
 
         <!-- EF Core -->
         <PackageVersion Include="Microsoft.EntityFrameworkCore"         Version="8.0.3" />
@@ -38,7 +38,17 @@
         <PackageVersion Include="Oracle.EntityFrameworkCore"            Version="8.23.40"/>
 
         <!-- CQRS, Swagger -->
-        <PackageVersion Include="MediatR" Version="12.5.0" />
+        <PackageVersion Include="MediatR"                Version="12.5.0" />
         <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.1" />
+
+        <!-- Configuration (DesignTimeFactory) -->
+        <PackageVersion Include="Microsoft.Extensions.Configuration"          Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.Json"     Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0" />
+
+        <!-- Testcontainers (versão estável) -->
+        <PackageVersion Include="Testcontainers" Version="4.6.0" />
+        
     </ItemGroup>
 </Project>

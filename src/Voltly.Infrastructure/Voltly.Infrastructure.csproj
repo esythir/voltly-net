@@ -14,6 +14,13 @@
     <PackageReference Include="Oracle.EntityFrameworkCore" />
     <PackageReference Include="Mapster" />
     <PackageReference Include="Scrutor" />
+
+    <!-- Configuration (DesignTimeFactory) -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+
   </ItemGroup>
 
   <ItemGroup>

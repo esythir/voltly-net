@@ -1,4 +1,3 @@
-// em DbContextSmokeTests.cs
 using Xunit;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ public class DbContextSmokeTests : IClassFixture<OracleTestContainer>
 
         var user = new User { Name = "Ada", Email = "ada@volt.ly", Password = "x" };
         await ctx.Users.AddAsync(user);
-        await ctx.CommitAsync();
+        await ctx.SaveChangesAsync();
 
         (await ctx.Users.CountAsync()).Should().Be(1);
     }

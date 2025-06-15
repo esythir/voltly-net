@@ -15,13 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
     <Folder Include="Behaviours\" />
     <Folder Include="DTOs\" />
     <Folder Include="Features\Equipments\Commands\" />
     <Folder Include="Features\Equipments\Queries\" />
     <Folder Include="Features\Equipments\Validators\" />
-    <Folder Include="Mapping\" />
   </ItemGroup>
 
 </Project>

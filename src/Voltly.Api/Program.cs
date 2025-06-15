@@ -1,42 +1,45 @@
+using Mapster;
+using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
+using Voltly.Infrastructure.Persistence;
+using Voltly.Domain;
+using Voltly.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var cfg = builder.Configuration;
+
+// DbContext
+builder.Services.AddDbContext<VoltlyDbContext>(opt =>
+{
+    opt.UseOracle(cfg.GetConnectionString("Oracle"))
+        .UseLazyLoadingProxies();
+});
+
+// Mapster
+var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+Voltly.Application.Mapping.MapsterConfig.Configure(typeAdapterConfig);
+builder.Services.AddSingleton(typeAdapterConfig);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
+
+// DI genéricos
+builder.Services.Scan(scan => scan
+    .FromAssemblies(
+        typeof(Voltly.Infrastructure.Repositories.Repository<>).Assembly,
+        typeof(Voltly.Application.Mapping.MapsterConfig).Assembly)
+    .AddClasses(c => c.AssignableTo(typeof(IRepository<>)))
+    .AsImplementedInterfaces()
+    .WithScopedLifetime());
+
+builder.Services.AddScoped<IUnitOfWork, VoltlyDbContext>();
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

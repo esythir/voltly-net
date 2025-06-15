@@ -1,0 +1,23 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+        <PackageVersion Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
+        <PackageVersion Include="MediatR" Version="12.5.0" />
+        <PackageVersion Include="Mapster" Version="7.4.2" />
+        <PackageVersion Include="Mapster.SourceGenerator" Version="7.4.2" />
+        <PackageVersion Include="Ardalis.GuardClauses" Version="5.0.0" />
+        <PackageVersion Include="FluentValidation" Version="11.10.0" />
+        <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.0" />
+        <PackageVersion Include="LazyCache" Version="2.2.0" />
+        <PackageVersion Include="xunit" Version="2.5.3" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+        <PackageVersion Include="FluentAssertions" Version="8.3.0" />
+        <PackageVersion Include="Testcontainers" Version="3.8.0" />
+    </ItemGroup>
+</Project>

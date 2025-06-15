@@ -7,21 +7,35 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.17" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+    <PackageReference Include="FluentValidation.AspNetCore"           Version="11.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi"          Version="8.0.17" />
+    <PackageReference Include="Swashbuckle.AspNetCore"                Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
-    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Filters\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ORM -->
+    <PackageReference Include="Oracle.EntityFrameworkCore"            Version="8.21.1100" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design"  Version="8.0.5">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- Mapster SourceGen -->
+    <PackageReference Include="Mapster"                               Version="8.5.0" />
+    <PackageReference Include="Mapster.SourceGenerator"               Version="8.5.0" PrivateAssets="all" />
+
+    <!-- IoC helper -->
+    <PackageReference Include="Scrutor"                               Version="4.2.0" />
   </ItemGroup>
 
 </Project>

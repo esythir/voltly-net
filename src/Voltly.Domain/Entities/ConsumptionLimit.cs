@@ -1,0 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Voltly.Domain.Entities;
+
+[Table("TB_CONSUMPTION_LIMITS")]
+public class ConsumptionLimit : IEntity
+{
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long Id { get; init; }
+
+    [Required]     public long EquipmentId { get; set; }
+    public Equipment Equipment { get; set; } = null!;
+
+    public double   LimitKwh   { get; set; }
+    public DateOnly ComputedAt { get; set; }
+}

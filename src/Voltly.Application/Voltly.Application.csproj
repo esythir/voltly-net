@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+    <Folder Include="Behaviours\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Features\Equipments\Commands\" />
+    <Folder Include="Features\Equipments\Queries\" />
+    <Folder Include="Features\Equipments\Validators\" />
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,8 @@
+using Voltly.Presentation.ViewModels;
+
 namespace Voltly.Presentation.Services;
 
-public class IWeatherApiService
+public interface IWeatherApiService
 {
-    
+    Task<WeatherForecast[]> GetForecastsAsync();
 }

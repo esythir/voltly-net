@@ -1,0 +1,27 @@
+# Rider/IntelliJ
+.idea/
+*.sln.iml
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# Arquivos de publish
+publish/
+
+# Logs e configurações locais
+*.log
+appsettings.Development.json
+
+# Dependências de pacote (se houver pasta de pacotes local)
+packages/
+
+# Outros artefatos
+*.db

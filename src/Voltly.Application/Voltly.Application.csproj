@@ -1,30 +1,19 @@
-﻿<Project>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ORMs -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" />
-    <PackageVersion Include="Oracle.EntityFrameworkCore" />
-
-    <!-- CQRS / Mapping -->
-    <PackageVersion Include="MediatR" />
-    <PackageVersion Include="Mapster" />
-    <PackageVersion Include="Mapster.SourceGenerator" />
-
-    <!-- Infra / Helpers -->
-    <PackageVersion Include="Scrutor" />
-    <PackageVersion Include="FluentValidation" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" />
-    <PackageVersion Include="LazyCache" />
-
-    <!-- Testes -->
-    <PackageVersion Include="xunit" />
-    <PackageVersion Include="xunit.runner.visualstudio" />
-    <PackageVersion Include="FluentAssertions" />
-    <PackageVersion Include="Testcontainers" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="LazyCache" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,8 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
+using Xunit;
+using Xunit.Abstractions; // se usar IAsyncLifetime
+
 
 namespace Voltly.Tests.Integration;
 

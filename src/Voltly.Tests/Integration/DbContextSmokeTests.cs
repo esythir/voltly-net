@@ -1,3 +1,5 @@
+// em DbContextSmokeTests.cs
+using Xunit;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Voltly.Infrastructure.Persistence;

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Voltly.Domain.Entities;
-using Voltly.Domain;
+using Voltly.Application.Abstractions;
 
 namespace Voltly.Infrastructure.Persistence;
 
@@ -19,26 +19,16 @@ public sealed class VoltlyDbContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
-        // Fluent-API overrides & indexes:
-        mb.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
-
-        mb.Entity<Sensor>()
-            .HasIndex(s => s.SerialNumber)
-            .IsUnique();
-
-        // Hooks
         foreach (var et in mb.Model.GetEntityTypes())
         {
             if (typeof(IEntity).IsAssignableFrom(et.ClrType))
-            {
-                mb.Entity(et.ClrType).Ignore("DomainEvents"); // DDD events
-            }
+                mb.Entity(et.ClrType).Ignore("DomainEvents");
         }
+
         base.OnModelCreating(mb);
     }
 
     /* Unit-of-Work */
-    public Task<int> CommitAsync(CancellationToken ct = default) => base.SaveChangesAsync(ct);
+    public Task<int> SaveChangesAsync(CancellationToken ct = default)
+        => base.SaveChangesAsync(ct);
 }

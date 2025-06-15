@@ -1,4 +1,5 @@
 using Xunit;
+using Xunit.Sdk;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Voltly.Infrastructure.Persistence;
@@ -6,15 +7,19 @@ using Voltly.Domain.Entities;
 
 namespace Voltly.Tests.Integration;
 
+[Trait("Category", "Integration")]
 public class DbContextSmokeTests : IClassFixture<OracleTestContainer>
 {
     private readonly OracleTestContainer _oracle;
 
     public DbContextSmokeTests(OracleTestContainer oracle) => _oracle = oracle;
 
-    [Fact]
+    [SkippableFact]
     public async Task CanInsertUser()
     {
+        Skip.IfNot(_oracle.IsDockerAvailable,
+            "Docker não está disponível. Pulando teste de integração.");
+
         var options = new DbContextOptionsBuilder<VoltlyDbContext>()
             .UseOracle(_oracle.ConnectionString)
             .UseLazyLoadingProxies()

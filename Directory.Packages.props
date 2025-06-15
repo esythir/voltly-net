@@ -48,7 +48,8 @@
         <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0" />
 
         <!-- Testcontainers (versão estável) -->
-        <PackageVersion Include="Testcontainers" Version="4.6.0" />
-        
+        <PackageVersion Include="Testcontainers.Oracle" Version="4.6.0" />
+        <PackageVersion Include="Xunit.SkippableFact" Version="1.5.23" />
+
     </ItemGroup>
 </Project>

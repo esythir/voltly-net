@@ -22,7 +22,8 @@
     <PackageReference Include="Oracle.EntityFrameworkCore" />
 
     <!-- Testcontainers -->
-    <PackageReference Include="Testcontainers" />
+    <PackageReference Include="Testcontainers.Oracle" />
+    <PackageReference Include="Xunit.SkippableFact" />
   </ItemGroup>
 
   <ItemGroup>

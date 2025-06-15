@@ -1,30 +1,63 @@
+using System;
 using System.Threading.Tasks;
+using Testcontainers.Oracle;
 using Xunit;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.WaitStrategies;
 
 namespace Voltly.Tests.Integration;
 
-/// <summary>Sobe um Oracle XE em Docker para testes de integração.</summary>
+/// <summary>
+/// Sobe (quando possível) um Oracle XE em container para testes de integração.
+/// Se o Docker não estiver disponível, o container não é inicializado e os
+/// testes podem ser ignorados usando <c>Skip.IfNot</c>.
+/// </summary>
 public sealed class OracleTestContainer : IAsyncLifetime
 {
-    private readonly TestcontainersContainer _container;
-
-    public string ConnectionString =>           // exposto aos testes
-        $"User Id=system;Password=oracle;" +
-        $"Data Source=localhost:{_container.GetMappedPublicPort(1521)}/XEPDB1";
+    private OracleContainer? _container;
+    
+    public bool IsDockerAvailable { get; private set; }
 
     public OracleTestContainer()
     {
-        _container = new TestcontainersBuilder<TestcontainersContainer>()
-            .WithImage("gvenzl/oracle-xe:21-slim-faststart")
-            .WithPortBinding(1521, assignRandomHostPort: true)
-            .WithEnvironment("ORACLE_PASSWORD", "oracle")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1521))
-            .Build();
+        try
+        {
+            _container = new OracleBuilder()
+                .WithImage("gvenzl/oracle-xe:21-slim-faststart")
+                .WithPassword("oracle")
+                .Build();
+
+            IsDockerAvailable = true;
+        }
+        catch
+        {
+            IsDockerAvailable = false;
+        }
+    }
+    
+    public string ConnectionString =>
+        _container?.GetConnectionString()
+        ?? throw new InvalidOperationException("Docker is not available.");
+
+    public async Task InitializeAsync()
+    {
+        if (IsDockerAvailable && _container is not null)
+        {
+            try
+            {
+                await _container.StartAsync();
+            }
+            catch
+            {
+                IsDockerAvailable = false;
+            }
+        }
     }
 
-    public Task InitializeAsync() => _container.StartAsync();
-    public Task DisposeAsync()    => _container.DisposeAsync();
+    public async Task DisposeAsync()
+    {
+        if (IsDockerAvailable && _container is not null)
+        {
+            await _container.DisposeAsync();
+        }
+    }
+    
 }

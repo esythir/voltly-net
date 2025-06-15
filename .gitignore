@@ -1,27 +1,43 @@
+# Build e artefatos
+bin/
+obj/
+publish/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
 # Rider/IntelliJ
 .idea/
 *.sln.iml
 
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
+# Arquivos de lançamento/de depuração
+launchSettings.json
 
-# Build outputs
-bin/
-obj/
-
-# Arquivos de publish
-publish/
-
-# Logs e configurações locais
+# Logs, caches e resultados de testes
 *.log
-appsettings.Development.json
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
 
-# Dependências de pacote (se houver pasta de pacotes local)
+# Pacotes e dependências
+*.nupkg
 packages/
 
-# Outros artefatos
-*.db
+# Arquivos de configurações locais de appsettings
+appsettings.Development.json
+appsettings.Local.json
+
+# User secrets
+secrets.json
+
+# MacOS
+.DS_Store
+
+# Node/npm
+node_modules/
+dist/

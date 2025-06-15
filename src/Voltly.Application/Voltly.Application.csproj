@@ -2,18 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" />
     <PackageReference Include="Mapster" />
-    <PackageReference Include="LazyCache" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Behaviours\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Features\Equipments\Commands\" />
+    <Folder Include="Features\Equipments\Queries\" />
+    <Folder Include="Features\Equipments\Validators\" />
   </ItemGroup>
 
 </Project>

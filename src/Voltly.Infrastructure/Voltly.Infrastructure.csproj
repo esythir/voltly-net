@@ -1,20 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- EF Core / Oracle / Mapster / IoC -->
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
     <PackageReference Include="Oracle.EntityFrameworkCore" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Scrutor" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\\Voltly.Application\\Voltly.Application.csproj" />
-    <ProjectReference Include="..\\Voltly.Domain\\Voltly.Domain.csproj" />
+    <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
+    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Folder Include="DataSeed\" />
+    <Folder Include="Persistence\Migrations\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

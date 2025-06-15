@@ -8,10 +8,21 @@ public static class MapsterConfig
 {
     public static void Configure(TypeAdapterConfig cfg)
     {
-        cfg.NewConfig<Equipment, EquipmentDto>()
-            .Map(dest => dest.OwnerId, src => src.OwnerId);
-
-        cfg.NewConfig<User, UserDto>()
+        // Entidade → DTO
+        cfg.NewConfig<Equipment,       EquipmentDto>();
+        cfg.NewConfig<Sensor,          SensorDto>();
+        cfg.NewConfig<EnergyReading,   EnergyReadingDto>();
+        cfg.NewConfig<ConsumptionLimit, ConsumptionLimitDto>();
+        cfg.NewConfig<AutomaticAction, AutomaticActionDto>();
+        cfg.NewConfig<Alert,            AlertDto>();
+        cfg.NewConfig<DailyReport,      DailyReportDto>();
+        cfg.NewConfig<User,             UserDto>()
             .IgnoreNullValues(true);
+
+        // (Opcional) DTO → Entidade para Commands de criação/atualização
+        // ex:
+        // cfg.NewConfig<CreateEquipmentDto, Equipment>()
+        //    .Map(dest => dest.Id, src => 0)
+        //    .IgnoreNonMapped(true);
     }
 }

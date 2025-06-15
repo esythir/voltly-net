@@ -3,16 +3,27 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- EF Core + Oracle + proxies -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" />
+
+    <!-- CQRS / Mapping / Swagger / Validation / IoC -->
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Mapster" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="FluentValidation.AspNetCore" />
-    <PackageReference Include="Mapster" />
+    <PackageReference Include="Scrutor" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
+    <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,33 +20,30 @@ public sealed class RegisterUserCommandHandler
     public RegisterUserCommandHandler(
         IUnitOfWork     uow,
         IUserRepository repo,
-        AppMapper       mapper)
-        => (_uow, _repo, _mapper) = (uow, repo, mapper);
+        AppMapper       mapper) =>
+        (_uow, _repo, _mapper) = (uow, repo, mapper);
 
     public async Task<UserResponse> Handle(
         RegisterUserCommand cmd,
         CancellationToken   ct)
     {
-        /* 1. e-mail único -------------------------------------- */
+        /* 1. e-mail único (case-insensitive) */
         if (await _repo.ExistsByEmailAsync(cmd.Request.Email, ct))
-            throw new DomainException($"E-mail '{cmd.Request.Email}' already registered.");
+            throw new DomainException(
+                $"E-mail '{cmd.Request.Email}' already registered.");
 
-        /* 2. materializa entidade ------------------------------ */
-        var entity = cmd.Request.Adapt<User>();
+        /* 2. cria entidade */
+        var entity      = cmd.Request.Adapt<User>();
+        entity.Email    = entity.Email.ToLowerInvariant();
         entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
         entity.Role     = UserRole.User;
-        entity.OnCreate();                       // carimba datas
+        entity.OnCreate();
 
-        /* 3. salva --------------------------------------------- */
-        await _repo.AddAsync(entity, ct);        // ainda sem Id
+        /* 3. persiste e COMMIT (o Id será preenchido) */
+        await _repo.AddAsync(entity, ct);
         await _uow.CommitAsync(ct);
 
-        /* 4. RELÊ para obter Id e colunas geradas -------------- */
-        var fresh = await _repo.GetByEmailAsync(cmd.Request.Email, ct)
-                    ?? throw new InvalidOperationException(
-                        "Erro ao reler o usuário recém-criado.");
-
-        /* 5. devolve DTO --------------------------------------- */
-        return _mapper.Map<UserResponse>(fresh);
+        /* 4. devolve DTO – não é necessário reler no banco */
+        return _mapper.Map<UserResponse>(entity);
     }
 }

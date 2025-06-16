@@ -14,11 +14,12 @@ public sealed class UserRepository : IUserRepository
         _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id, ct);
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default) =>
-        _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+        _db.Users.AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower(), ct);
 
     // 🔧  COUNT(*)  →  evita SELECT … THEN True/False
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default) =>
-        await _db.Users.CountAsync(u => u.Email == email, ct) > 0;
+        await _db.Users.CountAsync(u => u.Email.ToLower() == email.ToLower(), ct) > 0;
 
     public Task AddAsync(User user, CancellationToken ct = default) =>
         _db.Users.AddAsync(user, ct).AsTask();
@@ -57,9 +58,6 @@ public sealed class UserRepository : IUserRepository
     public ValueTask<User?> GetAsync(long id, CancellationToken ct = default) =>
         _db.Users.FindAsync([id], ct);
 
-    public Task DeleteAsync(User entity, CancellationToken ct = default)
-    {
-        _db.Users.Remove(entity);
-        return Task.CompletedTask;
-    }
+    public Task DeleteAsync(User e, CancellationToken ct = default)
+    { _db.Users.Remove(e); return Task.CompletedTask; }
 }

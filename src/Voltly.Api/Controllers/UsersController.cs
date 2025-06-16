@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +5,9 @@ using Voltly.Api.Extensions;
 using Voltly.Application.DTOs;
 using Voltly.Application.DTOs.Users;
 using Voltly.Application.Features.Users.Commands.CreateUser;
-using Voltly.Application.Features.Users.Commands.DeleteUser;
-using Voltly.Application.Features.Users.Commands.RegisterUser;
+using Voltly.Application.Features.Users.Commands.DeactivateUser;
 using Voltly.Application.Features.Users.Commands.UpdateUser;
+using Voltly.Application.Features.Users.Commands.UpdateUserAdmin;
 using Voltly.Application.Features.Users.Queries.GetUserById;
 using Voltly.Application.Features.Users.Queries.ListUsers;
 using Voltly.Application.Features.Users.Queries.SearchUsers;
@@ -22,24 +21,37 @@ public sealed class UsersController : ControllerBase
     private readonly IMediator _mediator;
     public UsersController(IMediator mediator) => _mediator = mediator;
     
-    [HttpPost("register"), AllowAnonymous]
-    public async Task<IActionResult> Register(RegisterUserRequest request, CancellationToken ct)
+    [HttpPost, Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> Create(AdminCreateUserRequest req, CancellationToken ct)
     {
-        var result = await _mediator.Send(new RegisterUserCommand(request), ct);
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        var dto = await _mediator.Send(new CreateUserCommand(
+            req.Name, req.Email, req.Password, req.BirthDate, req.Role), ct);
+        return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
     }
     
-    [HttpPost, Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Create(AdminCreateUserRequest request, CancellationToken ct)
+    [HttpPut("profile"), Authorize(Roles = "ADMIN,USER")]
+    public async Task<UserResponse> UpdateOwn(UpdateProfileRequest req, CancellationToken ct)
     {
-        var result = await _mediator.Send(new CreateUserCommand(
-            request.Name,
-            request.Email,
-            request.Password,
-            request.BirthDate,
-            request.Role), ct);
-
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        var id = User.GetUserId();
+        return await _mediator.Send(new UpdateUserCommand(id, req), ct);
+    }
+    
+    [HttpPut("{id:long}"), Authorize(Roles = "ADMIN")]
+    public async Task<UserResponse> Update(long id, UpdateUserAdminRequest req, CancellationToken ct) =>
+        await _mediator.Send(new UpdateUserAdminCommand(id, req), ct);
+    
+    [HttpDelete("profile"), Authorize(Roles = "ADMIN,USER")]
+    public async Task<IActionResult> DeactivateOwn(CancellationToken ct)
+    {
+        await _mediator.Send(new DeactivateUserCommand(User.GetUserId()), ct);
+        return NoContent();
+    }
+    
+    [HttpDelete("{id:long}"), Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> Delete(long id, CancellationToken ct)
+    {
+        await _mediator.Send(new Voltly.Application.Features.Users.Commands.DeleteUser.DeleteUserCommand(id), ct);
+        return NoContent();
     }
     
     [HttpGet("{id:long}"), Authorize(Roles = "ADMIN,USER")]
@@ -48,32 +60,15 @@ public sealed class UsersController : ControllerBase
         if (!User.IsAdmin() && User.GetUserId() != id)
             return Forbid();
 
-        var user = await _mediator.Send(new GetUserByIdQuery(id), ct);
-        return Ok(user);
+        var dto = await _mediator.Send(new GetUserByIdQuery(id), ct);
+        return Ok(dto);
     }
     
     [HttpGet, Authorize(Roles = "ADMIN")]
-    public Task<PagedResponse<UserResponse>> List([FromQuery] ListUsersQuery q, CancellationToken ct)
-        => _mediator.Send(q, ct);
+    public Task<PagedResponse<UserResponse>> List([FromQuery] ListUsersQuery q, CancellationToken ct) =>
+        _mediator.Send(q, ct);
 
     [HttpGet("search"), Authorize(Roles = "ADMIN")]
-    public Task<IEnumerable<UserResponse>> Search([FromQuery] string name, CancellationToken ct)
-        => _mediator.Send(new SearchUsersQuery(name), ct);
-    
-    [HttpPut("{id:long}"), Authorize(Roles = "ADMIN,USER")]
-    public async Task<ActionResult<UserResponse>> Update(long id, UpdateUserRequest req, CancellationToken ct)
-    {
-        if (!User.IsAdmin() && User.GetUserId() != id)
-            return Forbid();
-
-        var updated = await _mediator.Send(new UpdateUserCommand(id, req), ct);
-        return Ok(updated);
-    }
-    
-    [HttpDelete("{id:long}"), Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Delete(long id, CancellationToken ct)
-    {
-        await _mediator.Send(new DeleteUserCommand(id), ct);
-        return NoContent();
-    }
+    public Task<IEnumerable<UserResponse>> Search(string name, CancellationToken ct) =>
+        _mediator.Send(new SearchUsersQuery(name), ct);
 }

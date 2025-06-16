@@ -1,24 +1,11 @@
-using Oracle.EntityFrameworkCore;             
-using Microsoft.EntityFrameworkCore;
-using Voltly.Infrastructure.Persistence;
 using Voltly.Api.Extensions;
+using Voltly.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ⏩  Só UM registro do DbContext – vem de AddVoltlyInfrastructure
 builder.Services.AddVoltlyInfrastructure(builder.Configuration);
-
-var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<VoltlyDbContext>(opt =>
-    opt.UseOracle(
-            connStr,
-            oracle =>
-            {
-                // PARA Oracle 19 c use 21 c-compat             👇
-                oracle.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion21);
-                oracle.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName);
-            })
-        .UseLazyLoadingProxies());
 
 // MVC + Swagger
 builder.Services.AddControllers();
@@ -27,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// aplica migrations automática
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<VoltlyDbContext>();

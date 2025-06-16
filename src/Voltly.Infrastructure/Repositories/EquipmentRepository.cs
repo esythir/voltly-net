@@ -17,11 +17,11 @@ public sealed class EquipmentRepository : Repository<Equipment>, IEquipmentRepos
     public EquipmentRepository(VoltlyDbContext ctx) : base(ctx) { }
 
     public Task<Equipment?> GetByNameAsync(string name, CancellationToken ct = default) =>
-        _set.AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower(), ct);
-    
+        _set.AsNoTracking().FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower(), ct);
+
+    // 🔧  COUNT(*) em vez de AnyAsync()
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct = default) =>
-        (await _set.CountAsync(e => e.Name.ToLower() == name.ToLower(), ct)) > 0;
+        await _set.CountAsync(e => e.Name.ToLower() == name.ToLower(), ct) > 0;
 
     public IQueryable<Equipment> IncludeOwnerAndSensors(bool tracking = false) =>
         (tracking ? _set : _set.AsNoTracking())

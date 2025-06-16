@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Voltly.Application.Abstractions;
 using Voltly.Domain.Entities;
@@ -19,9 +15,10 @@ public sealed class UserRepository : IUserRepository
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default) =>
         _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
-    
+
+    // 🔧  COUNT(*)  →  evita SELECT … THEN True/False
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default) =>
-        (await _db.Users.CountAsync(u => u.Email == email, ct)) > 0;
+        await _db.Users.CountAsync(u => u.Email == email, ct) > 0;
 
     public Task AddAsync(User user, CancellationToken ct = default) =>
         _db.Users.AddAsync(user, ct).AsTask();
@@ -53,7 +50,7 @@ public sealed class UserRepository : IUserRepository
             .Where(u => EF.Functions.Like(u.Name.ToLower(), $"%{term.ToLower()}%"))
             .OrderBy(u => u.Name)
             .ToListAsync(ct);
-    
+
     public IQueryable<User> Queryable(bool asNoTracking = true) =>
         asNoTracking ? _db.Users.AsNoTracking() : _db.Users;
 

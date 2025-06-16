@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Voltly.Api.Extensions;
+using Voltly.Api.Swagger;
 using Voltly.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +74,9 @@ builder.Services.AddSwaggerGen(c =>
         } ] = Array.Empty<string>()
     });
     
+    c.TagActionsBy(api => new[] { api.ActionDescriptor.RouteValues["controller"]! });
+    
+    c.DocumentFilter<TagDescriptionsDocumentFilter>();
 });
 
 var app = builder.Build();

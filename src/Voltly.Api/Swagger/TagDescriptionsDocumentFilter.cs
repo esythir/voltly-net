@@ -2,22 +2,26 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
-public class TagDescriptionsDocumentFilter : IDocumentFilter
+namespace Voltly.Api.Swagger
 {
-    public void Apply(OpenApiDocument doc, DocumentFilterContext context)
+    /// <summary> Inserts title/description for each tag (controller) in the Swagger document. </summary>
+    public class TagDescriptionsDocumentFilter : IDocumentFilter
     {
-        doc.Tags = new List<OpenApiTag>
+        public void Apply(OpenApiDocument doc, DocumentFilterContext context)
         {
-            new OpenApiTag 
+            doc.Tags = new List<OpenApiTag>
             {
-                Name        = "Auth", 
-                Description = "Authentication and authorization endpoints, including login and registration."
-            },
-            new OpenApiTag 
-            { 
-                Name        = "Users", 
-                Description = "Endpoints for managing user profiles, including updating personal information and admin functionalities."
-            }
-        };
+                new OpenApiTag
+                {
+                    Name        = "Auth",
+                    Description = "Authentication and authorization endpoints, including login and registration."
+                },
+                new OpenApiTag
+                {
+                    Name        = "Users",
+                    Description = "Endpoints for managing user profiles, including updating personal information and admin functionalities."
+                }
+            };
+        }
     }
 }

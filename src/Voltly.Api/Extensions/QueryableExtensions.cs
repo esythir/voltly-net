@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Voltly.Application.DTOs;
 
 namespace Voltly.Api.Extensions;
 
@@ -14,10 +15,10 @@ public static class QueryableExtensions
         size = size < 1 ? 10 : size;
 
         var total = await query.CountAsync(ct);
-        var data  = await query.Skip((page - 1) * size)
+        var items = await query.Skip((page - 1) * size)
             .Take(size)
             .ToListAsync(ct);
 
-        return new PagedResponse<T>(data, total, page, size);
+        return new PagedResponse<T>(items, total, page, size);
     }
 }

@@ -1,5 +1,6 @@
 using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Voltly.Application.Abstractions;
 using Voltly.Application.DTOs;
 using Voltly.Domain.Entities;
@@ -17,21 +18,23 @@ public sealed class GetDailyHistoryHandler
     public async Task<PagedResponse<DailyReportDto>> Handle(
         GetDailyHistoryQuery q, CancellationToken ct)
     {
-        var query = _repo.Queryable()
-            .OrderByDescending(r => r.ReportDate);
+        IQueryable<DailyReport> query = _repo.Queryable();
 
         if (q.EquipmentId is not null)
             query = query.Where(r => r.EquipmentId == q.EquipmentId);
-
         if (q.From is not null)
             query = query.Where(r => r.ReportDate >= q.From);
-
         if (q.To is not null)
             query = query.Where(r => r.ReportDate <= q.To);
 
-        var paged = await query.ToPagedAsync(q.Page, q.Size, ct);
-        var dto   = _map.MapCollection<DailyReport, DailyReportDto>(paged.Data);
+        query = query.OrderByDescending(r => r.ReportDate);
 
-        return new(dto.ToList(), paged.Total, q.Page, q.Size);
+        var total   = await query.CountAsync(ct);
+        var reports = await query.Skip((q.Page - 1) * q.Size)
+            .Take(q.Size)
+            .ToListAsync(ct);
+
+        var dto = _map.MapCollection<DailyReport, DailyReportDto>(reports).ToList();
+        return new PagedResponse<DailyReportDto>(dto, total, q.Page, q.Size);
     }
 }

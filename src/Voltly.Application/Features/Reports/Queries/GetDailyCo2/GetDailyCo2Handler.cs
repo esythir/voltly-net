@@ -1,5 +1,6 @@
 using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Voltly.Application.Abstractions;
 using Voltly.Application.DTOs;
 using Voltly.Domain.Entities;
@@ -17,8 +18,7 @@ public sealed class GetDailyCo2Handler
     public async Task<IEnumerable<DailyReportDto>> Handle(
         GetDailyCo2Query q, CancellationToken ct)
     {
-        var query = _repo.Queryable()
-            .OrderByDescending(r => r.ReportDate);
+        IQueryable<DailyReport> query = _repo.Queryable();
 
         if (q.EquipmentId is not null)
             query = query.Where(r => r.EquipmentId == q.EquipmentId);
@@ -26,6 +26,8 @@ public sealed class GetDailyCo2Handler
             query = query.Where(r => r.ReportDate >= q.From);
         if (q.To is not null)
             query = query.Where(r => r.ReportDate <= q.To);
+
+        query = query.OrderByDescending(r => r.ReportDate);
 
         var list = await query.ToListAsync(ct);
         return _map.MapCollection<DailyReport, DailyReportDto>(list);

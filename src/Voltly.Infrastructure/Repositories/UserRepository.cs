@@ -63,9 +63,7 @@ public sealed class UserRepository : IUserRepository
     
     public Task AddAsyncRange(IEnumerable<User> users, CancellationToken ct = default)
         => _db.Users.AddRangeAsync(users, ct);
-
-    public Task DeleteAsync(User e, CancellationToken ct = default)
-    { _db.Users.Remove(e); return Task.CompletedTask; }
+    
     
     public Task RemoveAsync(User u, CancellationToken ct = default)
     { _db.Users.Remove(u); return Task.CompletedTask; }

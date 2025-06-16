@@ -16,7 +16,7 @@ public sealed class DeleteUserHandler : IRequestHandler<DeleteUserCommand>
         var user = await _repo.GetByIdAsync(cmd.Id, ct)
                    ?? throw new DomainException($"User {cmd.Id} not found.");
 
-        await _repo.DeleteAsync(user, ct);
+        await _repo.RemoveAsync(user, ct);
         await _uow.CommitAsync(ct);
     }
 }

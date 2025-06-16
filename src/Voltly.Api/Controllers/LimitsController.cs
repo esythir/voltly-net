@@ -17,7 +17,7 @@ public sealed class LimitsController : ControllerBase
         => _med.Send(new RecalculateMonthlyCommand(null), ct)
             .ContinueWith(_ => (IActionResult)NoContent(), ct);
     
-    /// <summaru>Recalculates consumption limits for a specific year/month (yyyyMM).</summary>
+    /// <summary>Recalculates consumption limits for a specific year/month (yyyyMM).</summary>
     [HttpPost("monthly-recalculation/{yearMonth:int:min(200001):max(210012)}")]
     public Task<IActionResult> RecalculateForPeriod(int yearMonth, CancellationToken ct)
         => _med.Send(new RecalculateMonthlyCommand(yearMonth), ct)

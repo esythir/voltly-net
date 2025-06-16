@@ -28,11 +28,17 @@ public abstract class Repository<T> : IRepository<T> where T : class, IEntity
     public Task AddAsync(T entity, CancellationToken ct = default) =>
         _set.AddAsync(entity, ct).AsTask();
 
+    public Task AddAsyncRange(IEnumerable<T> entities, CancellationToken ct = default) =>
+        _set.AddRangeAsync(entities, ct);
+
     public virtual void Update(T entity) => _set.Update(entity);
 
-    public Task DeleteAsync(T entity, CancellationToken ct = default)
+    public Task RemoveAsync(T entity, CancellationToken ct = default)
     {
         _set.Remove(entity);
         return Task.CompletedTask;
     }
+
+    public Task<int> SaveChangesAsync(CancellationToken ct = default) =>
+        _ctx.SaveChangesAsync(ct);
 }

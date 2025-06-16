@@ -1,12 +1,13 @@
-using Mapster;
+using System.Linq;
+using Voltly.Application.DTOs;
 
 namespace Voltly.Api.Extensions;
 
 public static class PagedResponseExtensions
 {
-    public static PagedResponse<TOut> Map<TIn,TOut>(
+    public static PagedResponse<TOut> Map<TIn, TOut>(
         this PagedResponse<TIn> src,
-        Func<TIn,TOut> selector)
-        => new(src.Data.Select(selector).ToList(),
+        Func<TIn, TOut> selector) =>
+        new(src.Items.Select(selector).ToList(),
             src.Total, src.Page, src.Size);
 }

@@ -31,4 +31,10 @@
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Sql\teacher-seed.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
 </Project>

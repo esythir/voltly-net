@@ -1,5 +1,4 @@
-// VoltlyDesignFactory.cs
-using System.IO;
+using Oracle.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -10,19 +9,31 @@ public sealed class VoltlyDesignFactory : IDesignTimeDbContextFactory<VoltlyDbCo
 {
     public VoltlyDbContext CreateDbContext(string[] args)
     {
+        var root = Path.GetFullPath(Path.Combine(
+            Directory.GetCurrentDirectory(), "..", ".."));
+
         var cfg = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true)
-            .AddJsonFile("appsettings.Development.json", optional: true)
+            .SetBasePath(root)
+            .AddJsonFile("src/Voltly.Api/appsettings.json",           optional: true)
+            .AddJsonFile("src/Voltly.Api/appsettings.Development.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 
-        var opts = new DbContextOptionsBuilder<VoltlyDbContext>()
-            .UseOracle(
-                cfg.GetConnectionString("Oracle"),
-                o => o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName)
-            );
+        var connection =
+            Environment.GetEnvironmentVariable("VOLTLY_CONN")
+            ?? cfg.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "Connection not found.  • Defina VOLTLY_CONN   OU   " +
+                "• Coloque \"DefaultConnection\" em appsettings.");
 
-        return new VoltlyDbContext(opts.Options);
+        var options = new DbContextOptionsBuilder<VoltlyDbContext>()
+            .UseOracle(connection, o =>
+            {
+                o.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion21);
+                o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName);
+            })
+            .Options;
+
+        return new VoltlyDbContext(options);
     }
 }

@@ -1,10 +1,24 @@
+using Oracle.EntityFrameworkCore;             
 using Microsoft.EntityFrameworkCore;
-using Voltly.Api.Extensions;
 using Voltly.Infrastructure.Persistence;
+using Voltly.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddVoltlyInfrastructure(builder.Configuration);
+
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<VoltlyDbContext>(opt =>
+    opt.UseOracle(
+            connStr,
+            oracle =>
+            {
+                // PARA Oracle 19 c use 21 c-compat             👇
+                oracle.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion21);
+                oracle.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName);
+            })
+        .UseLazyLoadingProxies());
 
 // MVC + Swagger
 builder.Services.AddControllers();
@@ -22,5 +36,4 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
-
 app.Run();

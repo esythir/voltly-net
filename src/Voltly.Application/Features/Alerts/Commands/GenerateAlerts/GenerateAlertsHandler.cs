@@ -22,23 +22,23 @@ public sealed class GenerateAlertsHandler : IRequestHandler<GenerateAlertsComman
 
     public async Task<int> Handle(GenerateAlertsCommand _, CancellationToken ct)
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today           = DateOnly.FromDateTime(DateTime.UtcNow);
+        var firstDayOfMonth = new DateOnly(today.Year, today.Month, 1);
 
         var reports = await _reports.Queryable()
-                                    .Where(r => r.ReportDate == today)
-                                    .ToListAsync(ct);
+            .Where(r => r.ReportDate == today)
+            .ToListAsync(ct);
 
         var limits  = await _limits.Queryable()
-                                   .Where(l => l.ComputedAt.Month == today.Month &&
-                                               l.ComputedAt.Year  == today.Year)
-                                   .ToDictionaryAsync(l => l.EquipmentId, ct);
+            .Where(l => l.ComputedAt == firstDayOfMonth)
+            .ToDictionaryAsync(l => l.EquipmentId, ct);
 
         var alertsToSave = new List<Alert>();
 
         foreach (var rep in reports)
         {
             if (!limits.TryGetValue(rep.EquipmentId, out var limit)) continue;
-            if (rep.ConsumptionKwh <= limit.LimitKwh)                 continue;
+            if (rep.ConsumptionKwh <= limit.LimitKwh)                continue;
 
             alertsToSave.Add(new Alert
             {

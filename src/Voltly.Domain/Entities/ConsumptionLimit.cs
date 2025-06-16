@@ -9,9 +9,11 @@ public class ConsumptionLimit : IEntity
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
-    [Required]     public long EquipmentId { get; set; }
-    public Equipment Equipment { get; set; } = null!;
+    [Required]
+    public long EquipmentId { get; set; }
 
-    public double   LimitKwh   { get; set; }
+    public virtual Equipment Equipment { get; set; } = null!;
+
+    public double LimitKwh { get; set; }
     public DateOnly ComputedAt { get; set; }
 }

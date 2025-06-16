@@ -9,10 +9,12 @@ public class EnergyReading : IEntity
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
-    [Required] public long   SensorId     { get; set; }
-    public   Sensor Sensor  { get; set; } = null!;
+    [Required]
+    public long SensorId { get; set; }
 
-    public double PowerKw      { get; set; }
+    public virtual Sensor Sensor { get; set; } = null!;
+
+    public double PowerKw { get; set; }
     public double OccupancyPct { get; set; }
-    public DateTime TakenAt    { get; set; }
+    public DateTime TakenAt { get; set; }
 }

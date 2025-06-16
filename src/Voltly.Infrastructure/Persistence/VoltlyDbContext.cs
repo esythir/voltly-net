@@ -6,7 +6,8 @@ namespace Voltly.Infrastructure.Persistence;
 
 public sealed class VoltlyDbContext : DbContext, IUnitOfWork
 {
-    public VoltlyDbContext(DbContextOptions<VoltlyDbContext> opt) : base(opt) { }
+    public VoltlyDbContext(DbContextOptions<VoltlyDbContext> opt) 
+        : base(opt) { }
 
     public DbSet<User>             Users             => Set<User>();
     public DbSet<Equipment>        Equipments        => Set<Equipment>();
@@ -19,16 +20,21 @@ public sealed class VoltlyDbContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
+        // converte todos os bools para NUMBER(1)
         foreach (var et in mb.Model.GetEntityTypes())
         {
-            if (typeof(IEntity).IsAssignableFrom(et.ClrType))
-                mb.Entity(et.ClrType).Ignore("DomainEvents");
+            foreach (var pi in et.ClrType.GetProperties().Where(p => p.PropertyType == typeof(bool)))
+            {
+                mb.Entity(et.ClrType)
+                    .Property(pi.Name)
+                    .HasConversion<int>()
+                    .HasColumnType("NUMBER(1)");
+            }
         }
-
-        base.OnModelCreating(mb);
+        mb.ApplyConfigurationsFromAssembly(typeof(VoltlyDbContext).Assembly);
     }
 
-    /* Unit-of-Work */
-    public Task<int> SaveChangesAsync(CancellationToken ct = default)
+    // override em vez de esconder o método base
+    public override Task<int> SaveChangesAsync(CancellationToken ct = default)
         => base.SaveChangesAsync(ct);
 }

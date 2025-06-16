@@ -1,4 +1,4 @@
-using System;
+// VoltlyDesignFactory.cs
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -10,19 +10,19 @@ public sealed class VoltlyDesignFactory : IDesignTimeDbContextFactory<VoltlyDbCo
 {
     public VoltlyDbContext CreateDbContext(string[] args)
     {
-        IConfigurationRoot cfg = new ConfigurationBuilder()
+        var cfg = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Development.json", optional: false)
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile("appsettings.Development.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 
-        var options = new DbContextOptionsBuilder<VoltlyDbContext>()
+        var opts = new DbContextOptionsBuilder<VoltlyDbContext>()
             .UseOracle(
                 cfg.GetConnectionString("Oracle"),
-                o => o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName))
-            .UseLazyLoadingProxies()
-            .Options;
+                o => o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName)
+            );
 
-        return new VoltlyDbContext(options);
+        return new VoltlyDbContext(opts.Options);
     }
 }

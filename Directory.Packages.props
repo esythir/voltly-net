@@ -4,6 +4,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageVersion Include="BCrypt.Net-Next" Version="4.0.2" />
+        <!-- <PackageVersion Include="MapsterMapper"   Version="7.3.0" />-->
+
         <!-- DI helper -->
         <PackageVersion Include="Scrutor" Version="3.0.0" />
 

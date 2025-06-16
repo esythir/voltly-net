@@ -32,8 +32,4 @@
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Unit\" />
-  </ItemGroup>
-
 </Project>

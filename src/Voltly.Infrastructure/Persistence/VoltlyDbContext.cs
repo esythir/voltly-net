@@ -37,4 +37,7 @@ public sealed class VoltlyDbContext : DbContext, IUnitOfWork
     // override em vez de esconder o método base
     public override Task<int> SaveChangesAsync(CancellationToken ct = default)
         => base.SaveChangesAsync(ct);
+
+    public async Task CommitAsync(CancellationToken ct = default)
+        => await SaveChangesAsync(ct);
 }

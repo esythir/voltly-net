@@ -1,8 +1,10 @@
-namespace Voltly.Application.Abstractions
+using System.Collections.Generic;
+
+namespace Voltly.Application.Abstractions;
+
+public interface IMapper
 {
-    public interface IMapper
-    {
-        TDestination Map<TSource, TDestination>(TSource source);
-        IEnumerable<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources);
-    }
+    TDestination Map<TDestination>(object source);
+    TDestination Map<TSource, TDestination>(TSource source);
+    IEnumerable<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources);
 }

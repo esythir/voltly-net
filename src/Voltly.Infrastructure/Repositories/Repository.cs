@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Voltly.Application.Abstractions;
 using Voltly.Domain.Entities;
@@ -24,6 +27,8 @@ public abstract class Repository<T> : IRepository<T> where T : class, IEntity
 
     public Task AddAsync(T entity, CancellationToken ct = default) =>
         _set.AddAsync(entity, ct).AsTask();
+
+    public virtual void Update(T entity) => _set.Update(entity);
 
     public Task DeleteAsync(T entity, CancellationToken ct = default)
     {

@@ -10,6 +10,8 @@
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="Mapster" />
+    <PackageReference Include="BCrypt.Net-Next" />
+    <!-- <PackageReference Include="MapsterMapper" /> -->
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Behaviours\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Features\Users\Queries\" />
     <Folder Include="Features\Users\Validators\" />
   </ItemGroup>
 

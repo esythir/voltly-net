@@ -1,14 +1,19 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Voltly.Application.Abstractions;
 
-public interface IRepository<T> where T : class
+
+public interface IRepository<TEntity> where TEntity : class
 {
-    IQueryable<T>   Queryable   (bool asNoTracking = true);
-    ValueTask<T?>   GetAsync    (long id,  CancellationToken ct = default);
-    Task            AddAsync    (T entity, CancellationToken ct = default);
-    Task            DeleteAsync (T entity, CancellationToken ct = default);
+    IQueryable<TEntity> Queryable(bool asNoTracking = true);
+
+    ValueTask<TEntity?> GetAsync(long id, CancellationToken ct = default);
+
+    Task AddAsync(TEntity entity, CancellationToken ct = default);
+
+    void Update(TEntity entity);
+
+    Task DeleteAsync(TEntity entity, CancellationToken ct = default);
 }

@@ -15,22 +15,21 @@
     <PackageReference Include="Mapster" />
     <PackageReference Include="Scrutor" />
 
-    <!-- Configuration (DesignTimeFactory) -->
+    <!-- Configuration -->
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
 
+    <!-- JWT -->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataSeed\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

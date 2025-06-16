@@ -5,6 +5,13 @@
 
     <ItemGroup>
         <PackageVersion Include="BCrypt.Net-Next" Version="4.0.2" />
+        <!-- JWT -->
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer"    Version="8.0.3"  />
+        <PackageVersion Include="System.IdentityModel.Tokens.Jwt"                  Version="7.1.2"  />
+
+        <!-- MediatR (injeção de dependência) -->
+        <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection"
+                        Version="12.5.0" />
         <!-- <PackageVersion Include="MapsterMapper"   Version="7.3.0" />-->
 
         <!-- DI helper -->

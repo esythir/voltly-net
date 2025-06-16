@@ -10,7 +10,8 @@ using Voltly.Application.Features.Users.Queries.ListUsers;
 using Voltly.Application.Mapping;
 using Voltly.Infrastructure.Persistence;
 using Voltly.Infrastructure.Repositories;
-
+using Voltly.Infrastructure.Services;   // 👈
+    
 namespace Voltly.Api.Extensions;
 
 public static class ServiceCollectionExtensions
@@ -25,7 +26,6 @@ public static class ServiceCollectionExtensions
                     o => o.MigrationsAssembly(typeof(VoltlyDbContext).Assembly.FullName))
                 .UseLazyLoadingProxies());
 
-        // ➜  MESMA instância para IUnitOfWork
         services.AddScoped<IUnitOfWork>(
             sp => sp.GetRequiredService<VoltlyDbContext>());
 
@@ -49,6 +49,9 @@ public static class ServiceCollectionExtensions
             .AddClasses(c => c.AssignableTo(typeof(IRepository<>)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+
+        /* 🔐 JWT Token Generator --------------------------------------------- */
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;
     }

@@ -2,35 +2,36 @@ using Microsoft.EntityFrameworkCore;
 using Voltly.Application.Abstractions;
 using Voltly.Infrastructure.Persistence;
 
-namespace Voltly.Infrastructure.Repositories
+namespace Voltly.Infrastructure.Repositories;
+
+public class GenericRepository<TEntity> : IRepository<TEntity>
+    where TEntity : class
 {
-    public class GenericRepository<T> : IRepository<T>
-        where T : class
-    {
-        protected readonly VoltlyDbContext _ctx;
-        protected readonly DbSet<T>        _set;
+    private readonly VoltlyDbContext _db;
+    private readonly DbSet<TEntity>  _set;
 
-        public GenericRepository(VoltlyDbContext ctx)
-        {
-            _ctx = ctx;
-            _set = ctx.Set<T>();
-        }
+    public GenericRepository(VoltlyDbContext db)
+    { _db = db; _set = db.Set<TEntity>(); }
 
-        public IQueryable<T> Queryable(bool asNoTracking = true)
-            => asNoTracking ? _set.AsNoTracking() : _set;
+    public IQueryable<TEntity> Queryable(bool noTracking = true)
+        => noTracking ? _set.AsNoTracking() : _set;
 
-        public ValueTask<T?> GetAsync(long id, CancellationToken ct = default)
-            => _set.FindAsync(new object[] { id }, ct);
+    public IQueryable<TEntity> Query() => _set;
 
-        public Task AddAsync(T entity, CancellationToken ct = default)
-            => _set.AddAsync(entity, ct).AsTask();
+    public ValueTask<TEntity?> GetAsync(long id, CancellationToken ct = default)
+        => _set.FindAsync([id], ct);
 
-        public Task DeleteAsync(T entity, CancellationToken ct = default)
-        {
-            _set.Remove(entity);
-            return Task.CompletedTask;
-        }
+    public Task AddAsync(TEntity entity, CancellationToken ct = default)
+        => _set.AddAsync(entity, ct).AsTask();
 
-        public void Update(T entity) => _set.Update(entity);
-    }
+    public Task AddAsyncRange(IEnumerable<TEntity> entities, CancellationToken ct = default)
+        => _set.AddRangeAsync(entities, ct);
+
+    public void Update(TEntity entity) => _set.Update(entity);
+
+    public Task RemoveAsync(TEntity entity, CancellationToken ct = default)
+    { _set.Remove(entity); return Task.CompletedTask; }
+
+    public Task<int> SaveChangesAsync(CancellationToken ct = default)
+        => _db.SaveChangesAsync(ct);
 }

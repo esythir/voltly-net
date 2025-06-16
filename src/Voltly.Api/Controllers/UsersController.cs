@@ -1,8 +1,12 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Voltly.Api.Extensions;
 using Voltly.Application.DTOs;
 using Voltly.Application.DTOs.Users;
+using Voltly.Application.Features.Users.Commands.CreateUser;
+using Voltly.Application.Features.Users.Commands.DeleteUser;
 using Voltly.Application.Features.Users.Commands.RegisterUser;
 using Voltly.Application.Features.Users.Commands.UpdateUser;
 using Voltly.Application.Features.Users.Queries.GetUserById;
@@ -17,33 +21,59 @@ public sealed class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
     public UsersController(IMediator mediator) => _mediator = mediator;
-
-    /// <summary>Criar novo usuário (registro público)</summary>
-    [HttpPost, AllowAnonymous]
+    
+    [HttpPost("register"), AllowAnonymous]
     public async Task<IActionResult> Register(RegisterUserRequest request, CancellationToken ct)
     {
         var result = await _mediator.Send(new RegisterUserCommand(request), ct);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
-
-    /// <summary>Buscar por id (Admin ou próprio usuário)</summary>
-    [HttpGet("{id:long}"), Authorize(Roles = "ADMIN,USER")]
-    public async Task<UserResponse> GetById(long id, CancellationToken ct)
-        => await _mediator.Send(new GetUserByIdQuery(id), ct);
-
-    /// <summary>Listar usuários paginados</summary>
-    [HttpGet, Authorize(Roles = "ADMIN")]
-    public async Task<PagedResponse<UserResponse>> List([FromQuery] ListUsersQuery query, CancellationToken ct)
-        => await _mediator.Send(query, ct);
-
-    /// <summary>Buscar por nome (ADMIN)</summary>
-    [HttpGet("search"), Authorize(Roles = "ADMIN")]
-    public async Task<IEnumerable<UserResponse>> Search([FromQuery] string name, CancellationToken ct)
-        => await _mediator.Send(new SearchUsersQuery(name), ct);
-
-    /// <summary>Atualizar usuário (self ou admin)</summary>
-    [HttpPut("{id:long}"), Authorize(Roles = "ADMIN,USER")]
-    public async Task<UserResponse> Update(long id, UpdateUserRequest req, CancellationToken ct)
-        => await _mediator.Send(new UpdateUserCommand(id, req), ct);
     
+    [HttpPost, Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> Create(AdminCreateUserRequest request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new CreateUserCommand(
+            request.Name,
+            request.Email,
+            request.Password,
+            request.BirthDate,
+            request.Role), ct);
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
+    
+    [HttpGet("{id:long}"), Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<UserResponse>> GetById(long id, CancellationToken ct)
+    {
+        if (!User.IsAdmin() && User.GetUserId() != id)
+            return Forbid();
+
+        var user = await _mediator.Send(new GetUserByIdQuery(id), ct);
+        return Ok(user);
+    }
+    
+    [HttpGet, Authorize(Roles = "ADMIN")]
+    public Task<PagedResponse<UserResponse>> List([FromQuery] ListUsersQuery q, CancellationToken ct)
+        => _mediator.Send(q, ct);
+
+    [HttpGet("search"), Authorize(Roles = "ADMIN")]
+    public Task<IEnumerable<UserResponse>> Search([FromQuery] string name, CancellationToken ct)
+        => _mediator.Send(new SearchUsersQuery(name), ct);
+    
+    [HttpPut("{id:long}"), Authorize(Roles = "ADMIN,USER")]
+    public async Task<ActionResult<UserResponse>> Update(long id, UpdateUserRequest req, CancellationToken ct)
+    {
+        if (!User.IsAdmin() && User.GetUserId() != id)
+            return Forbid();
+
+        var updated = await _mediator.Send(new UpdateUserCommand(id, req), ct);
+        return Ok(updated);
+    }
+    
+    [HttpDelete("{id:long}"), Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> Delete(long id, CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteUserCommand(id), ct);
+        return NoContent();
+    }
 }

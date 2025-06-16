@@ -10,5 +10,10 @@ public sealed class CreateUserValidator : AbstractValidator<CreateUserCommand>
         RuleFor(c => c.Email)    .NotEmpty().EmailAddress().MaximumLength(180);
         RuleFor(c => c.Password) .NotEmpty().MinimumLength(6).MaximumLength(50);
         RuleFor(c => c.BirthDate).LessThan(DateOnly.FromDateTime(DateTime.Today));
+
+        RuleFor(c => c.Role)
+            .Must(r => r.Equals("USER",  StringComparison.OrdinalIgnoreCase) ||
+                       r.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+            .WithMessage("Role must be USER or ADMIN");
     }
 }

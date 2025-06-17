@@ -7,8 +7,8 @@ namespace Voltly.Infrastructure.Repositories;
 
 public sealed class UserRepository : IUserRepository
 {
-    private readonly VoltlyDbContext _db;
-    public UserRepository(VoltlyDbContext db) => _db = db;
+    private readonly IApplicationDbContext _db;
+    public UserRepository(IApplicationDbContext db) => _db = db;
 
     public Task<User?> GetByIdAsync(long id, CancellationToken ct = default) =>
         _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id, ct);

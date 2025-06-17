@@ -5,7 +5,7 @@ using Voltly.Application.Abstractions;
 
 namespace Voltly.Infrastructure.Persistence;
 
-public sealed class VoltlyDbContext : DbContext, IUnitOfWork
+public sealed class VoltlyDbContext : DbContext, IUnitOfWork, IApplicationDbContext
 {
     public VoltlyDbContext(DbContextOptions<VoltlyDbContext> opt) : base(opt) { }
 

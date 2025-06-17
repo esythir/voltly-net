@@ -28,6 +28,9 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IUnitOfWork>(
             sp => sp.GetRequiredService<VoltlyDbContext>());
+        
+        services.AddScoped<IApplicationDbContext>(
+            sp => sp.GetRequiredService<VoltlyDbContext>());
 
         /* Mapster ------------------------------------------------------------- */
         var cfgMap = TypeAdapterConfig.GlobalSettings;

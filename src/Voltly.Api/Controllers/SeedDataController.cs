@@ -1,28 +1,24 @@
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Voltly.Infrastructure.Persistence;
 
 namespace Voltly.Api.Controllers;
 
-/// <summary>
-/// Roda o script fixo <c>DataSeed/teacher-seed.sql</c>.
-/// POST /api/seed/teacher
-/// </summary>
 [ApiController]
-[Route("api/seed/teacher")] 
-[AllowAnonymous] 
+[Route("api/seed")]
 public sealed class SeedDataController : ControllerBase
 {
     private readonly VoltlyDbContext _db;
     public SeedDataController(VoltlyDbContext db) => _db = db;
-
+    
     [HttpPost]
     public async Task<IActionResult> Run(CancellationToken ct = default)
     {
-        var file = Path.Combine(AppContext.BaseDirectory, "DataSeed", "teacher-seed.sql");
+        const string ScriptName = "teacher-seed.sql";
+        var file = Path.Combine(AppContext.BaseDirectory, "DataSeed", ScriptName);
+
         if (!System.IO.File.Exists(file))
             return NotFound($"SQL script not found at '{file}'");
 
@@ -34,40 +30,48 @@ public sealed class SeedDataController : ControllerBase
         raw = Regex.Replace(raw, @"--.*?$", string.Empty, RegexOptions.Multiline);
 
         var batches = new List<string>();
-        var buf     = new StringBuilder();
+        var buffer  = new StringBuilder();
         var inPlSql = false;
 
         foreach (var line in raw.Split('\n'))
         {
-            var t = line.Trim();
-
-            if (!inPlSql && t.StartsWith("BEGIN", StringComparison.OrdinalIgnoreCase))
+            var trimmed = line.Trim();
+            
+            if (!inPlSql &&
+                (trimmed.StartsWith("DECLARE", StringComparison.OrdinalIgnoreCase) ||
+                 trimmed.StartsWith("BEGIN",   StringComparison.OrdinalIgnoreCase)))
                 inPlSql = true;
-
-            if (inPlSql && t.Equals("END;", StringComparison.OrdinalIgnoreCase))
+            
+            if (inPlSql && trimmed.Equals("END;", StringComparison.OrdinalIgnoreCase))
             {
-                buf.AppendLine(line);
-                batches.Add(buf.ToString());
-                buf.Clear();
+                buffer.AppendLine(line);
+                batches.Add(buffer.ToString());
+                buffer.Clear();
                 inPlSql = false;
                 continue;
             }
-
-            if (!inPlSql && (t == "/" || t.EndsWith(';')))
+            
+            if (!inPlSql &&
+                (trimmed == "/" || trimmed.EndsWith(";")))
             {
-                buf.AppendLine(t == "/" ? string.Empty : line.Replace(";", ""));
-                if (buf.Length > 0) batches.Add(buf.ToString());
-                buf.Clear();
+                buffer.AppendLine(trimmed == "/" ? string.Empty : line);
+                if (!string.IsNullOrWhiteSpace(buffer.ToString()))
+                    batches.Add(buffer.ToString());
+                buffer.Clear();
             }
-            else buf.AppendLine(line);
+            else
+            {
+                buffer.AppendLine(line);
+            }
         }
-        if (buf.Length > 0) batches.Add(buf.ToString());
+        if (buffer.Length > 0) batches.Add(buffer.ToString());
         
         await using var trx = await _db.Database.BeginTransactionAsync(ct);
-        foreach (var sql in batches.Select(b => b.Trim()).Where(b => b.Length > 0))
-            await _db.Database.ExecuteSqlRawAsync(sql, ct);
-        await trx.CommitAsync(ct);
 
+        foreach (var sql in batches.Where(b => !string.IsNullOrWhiteSpace(b)))
+            await _db.Database.ExecuteSqlRawAsync(sql, ct);
+
+        await trx.CommitAsync(ct);
         return NoContent();
     }
 }

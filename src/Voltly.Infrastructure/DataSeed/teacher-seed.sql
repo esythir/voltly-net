@@ -12,83 +12,100 @@
    Can be executed multiple times – previous seed is removed.
    ============================================================*/
 
--- 0) Remove previous demo seed
-DELETE FROM TB_USERS WHERE "EMAIL" = 'user@voltly.dev';  -- << coluna entre aspas
+DELETE FROM TB_USERS
+WHERE  "Email" = 'user@voltly.dev';
 
 DECLARE
-v_user_id   TB_USERS.ID%TYPE;
-    v_equipment TB_EQUIPMENTS.ID%TYPE;
-    v_sensor    TB_SENSORS.ID%TYPE;
+v_user_id   TB_USERS."Id"%TYPE;
+    v_equipment TB_EQUIPMENTS."Id"%TYPE;
+    v_sensor    TB_SENSORS."Id"%TYPE;
 BEGIN
-    -- 1) User --------------------------------------------------
+    ------------------------------------------------------------
+    -- 1) User
+    ------------------------------------------------------------
 INSERT INTO TB_USERS
-("NAME", "EMAIL", "PASSWORD", "BIRTHDATE", "ROLE",
- "ISACTIVE", "CREATEDAT", "UPDATEDAT")
+("Name", "Email", "Password", "BirthDate",
+ "Role", "IsActive", "CreatedAt", "UpdatedAt")
 VALUES ('Professor User',
         'user@voltly.dev',
         '$2b$11$0AWGF8lvlB2EKU82Xqp2ueL/OXo8OvaW7HkB03JrSRZJ8sg19xcj6',
         DATE '1990-01-01',
-        'User',
+        'USER',
         1,
         SYSTIMESTAMP, SYSTIMESTAMP)
-    RETURNING "ID" INTO v_user_id;
+    RETURNING "Id" INTO v_user_id;
 
--- 2) Equipment --------------------------------------------
+------------------------------------------------------------
+-- 2) Equipment
+------------------------------------------------------------
 INSERT INTO TB_EQUIPMENTS
-("OWNERID", "NAME", "DESCRIPTION", "DAILYLIMITKWH", "ACTIVE")
+("OwnerId", "Name", "Description",
+ "DailyLimitKwh", "Active")
 VALUES (v_user_id,
         'AC – Room 101',
         'Primary demo equipment',
         8, 1)
-    RETURNING "ID" INTO v_equipment;
+    RETURNING "Id" INTO v_equipment;
 
--- 3) Sensor -----------------------------------------------
+------------------------------------------------------------
+-- 3) Sensor
+------------------------------------------------------------
 INSERT INTO TB_SENSORS
-("SERIALNUMBER", "TYPE", "EQUIPMENTID")
+("SerialNumber", "Type", "EquipmentId")
 VALUES ('SN-DEMO-0001', 'SMART_PLUG', v_equipment)
-    RETURNING "ID" INTO v_sensor;
+    RETURNING "Id" INTO v_sensor;
 
--- 4) 24 h of readings (30-min) -----------------------------
+------------------------------------------------------------
+-- 4) 24 h of energy readings (30 min)
+------------------------------------------------------------
 FOR i IN 0 .. 47 LOOP
         INSERT INTO TB_ENERGY_READINGS
-              ("SENSORID", "POWERKW", "OCCUPANCYPCT", "TAKENAT")
+              ("SensorId", "PowerKw", "OccupancyPct", "TakenAt")
         VALUES (v_sensor,
                 0.20 + DBMS_RANDOM.VALUE(0, 0.05),
                 DBMS_RANDOM.VALUE(0, 5),
                 SYSTIMESTAMP - (i * 30 / 1440));
 END LOOP;
 
-    -- 5) Yesterday report -------------------------------------
+    ------------------------------------------------------------
+    -- 5) Yesterday’s daily report
+    ------------------------------------------------------------
 INSERT INTO TB_DAILY_REPORTS
-("EQUIPMENTID", "REPORTDATE", "CONSUMPTIONKWH",
- "CO2EMISSIONKG", "EFFICIENCYRATING", "CREATEDAT")
+("EquipmentId", "ReportDate", "ConsumptionKwh",
+ "Co2EmissionKg", "EfficiencyRating", "CreatedAt")
 VALUES (v_equipment,
         TRUNC(SYSDATE - 1),
         3.4,
         3.4 * 0.0006,
-        0,
+        0,                   -- EfficiencyRating.Good
         SYSTIMESTAMP);
 
--- 6) Monthly limit ----------------------------------------
+------------------------------------------------------------
+-- 6) Monthly limit (current month)
+------------------------------------------------------------
 INSERT INTO TB_CONSUMPTION_LIMITS
-("EQUIPMENTID", "LIMITKWH", "COMPUTEDAT")
+("EquipmentId", "LimitKwh", "ComputedAt")
 VALUES (v_equipment,
         4.0,
         TRUNC(ADD_MONTHS(SYSDATE, 0), 'MM'));
 
--- 7) Alert (today) ----------------------------------------
+------------------------------------------------------------
+-- 7) Consumption alert (today)
+------------------------------------------------------------
 INSERT INTO TB_ALERTS
-("EQUIPMENTID", "ALERTDATE", "CONSUMPTIONKWH",
- "LIMITKWH", "EXCEEDEDBYKWH", "MESSAGE", "CREATEDAT")
+("EquipmentId", "AlertDate", "ConsumptionKwh",
+ "LimitKwh", "ExceededByKwh", "Message", "CreatedAt")
 VALUES (v_equipment,
-        TO_NUMBER(TO_CHAR(TRUNC(SYSDATE), 'YYYYMMDD')),
+        TRUNC(SYSDATE),
         4.5, 4.0, 0.5,
         'Consumption exceeded by 0.5 kWh',
         SYSTIMESTAMP);
 
--- 8) Automatic action -------------------------------------
+------------------------------------------------------------
+-- 8) Automatic action (simulated shutdown)
+------------------------------------------------------------
 INSERT INTO TB_AUTOMATIC_ACTIONS
-("EQUIPMENTID", "TYPE", "DETAILS", "EXECUTEDAT")
+("EquipmentId", "Type", "Details", "ExecutedAt")
 VALUES (v_equipment,
         'SHUTDOWN',
         'Shutdown triggered by demo seed',

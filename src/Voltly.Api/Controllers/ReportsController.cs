@@ -16,19 +16,31 @@ public sealed class ReportsController : ControllerBase
     
     /// <summary>Generates a daily consumption report for a device.</summary>
     [HttpPost("daily-consumption"), Authorize(Roles = "ADMIN")]
-    public Task<DailyReportDto> GenerateDaily(
+    public async Task<IActionResult> GenerateDaily(
         GenerateDailyReportCommand cmd,
-        CancellationToken ct) => _med.Send(cmd, ct);
+        CancellationToken ct)
+    {
+        var result = await _med.Send(cmd, ct);
+        return Ok(result);
+    }
     
     /// <summary>History of daily reports (paginated).</summary>
     [HttpGet("daily-consumption"), Authorize(Roles = "ADMIN,USER")]
-    public Task<PagedResponse<DailyReportDto>> History(
+    public async Task<IActionResult> History(
         [FromQuery] GetDailyHistoryQuery q,
-        CancellationToken ct) => _med.Send(q, ct);
+        CancellationToken ct)
+    {
+        var result = await _med.Send(q, ct);
+        return Ok(result);
+    }
     
     /// <summary>Report of CO₂ emissions derived from daily consumption.</summary>
     [HttpGet("daily-consumption/co2"), Authorize(Roles = "ADMIN,USER")]
-    public Task<IEnumerable<DailyReportDto>> Co2(
+    public async Task<IActionResult> Co2(
         [FromQuery] GetDailyCo2Query q,
-        CancellationToken ct) => _med.Send(q, ct);
+        CancellationToken ct)
+    {
+        var result = await _med.Send(q, ct);
+        return Ok(result);
+    }
 }

@@ -15,12 +15,19 @@ public sealed class AlertsController : ControllerBase
     
     /// <summary>Generates consumption alerts for all devices.</summary>
     [HttpPost, Authorize(Roles = "ADMIN")]
-    public Task<int> Generate(CancellationToken ct) =>
-        _med.Send(new GenerateAlertsCommand(), ct);
+    public async Task<IActionResult> Generate(CancellationToken ct)
+    {
+        var result = await _med.Send(new GenerateAlertsCommand(), ct);
+        return Ok(result);
+    }
     
     /// <summary>Searches for alerts (optional filters).</summary>
     [HttpGet, Authorize(Roles = "ADMIN,USER")]
-    public Task<PagedResponse<AlertDto>> List(
+    public async Task<IActionResult> List(
         [FromQuery] ListAlertsQuery q,
-        CancellationToken ct) => _med.Send(q, ct);
+        CancellationToken ct)
+    {
+        var result = await _med.Send(q, ct);
+        return Ok(result);
+    }
 }

@@ -17,15 +17,19 @@ public sealed class AuthController : ControllerBase
     
     /// <summary>Login: authenticates a user and returns a JWT token.</summary>
     [HttpPost("login"), AllowAnonymous]
-    public async Task<AuthResponse> Login(LoginRequest request, CancellationToken ct) =>
-        await _mediator.Send(new LoginCommand(request), ct);
+    public async Task<IActionResult> Login(LoginRequest request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new LoginCommand(request), ct);
+        return Ok(result);
+    }
     
     /// <summary>Sign-up: creates a USER account and returns a token.</summary>
     [HttpPost("register"), AllowAnonymous]
-    public async Task<AuthResponse> Register(RegisterUserRequest request, CancellationToken ct)
+    public async Task<IActionResult> Register(RegisterUserRequest request, CancellationToken ct)
     {
         var reg = await _mediator.Send(new RegisterUserCommand(request), ct);
         var loginReq = new LoginRequest(reg.Email, request.Password);
-        return await _mediator.Send(new LoginCommand(loginReq), ct);
+        var result = await _mediator.Send(new LoginCommand(loginReq), ct);
+        return Ok(result);
     }
 }

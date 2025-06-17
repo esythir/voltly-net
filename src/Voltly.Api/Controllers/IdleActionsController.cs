@@ -14,7 +14,11 @@ public sealed class IdleActionsController : ControllerBase
     
     /// <summary>Checks sensors and, if idleness is confirmed, registers and returns automatic shutdown actions.</summary>
     [HttpGet]
-    public Task<IEnumerable<AutomaticActionDto>> CheckIdle(
+    public async Task<IActionResult> CheckIdle(
         [FromQuery] CheckIdleQuery query,
-        CancellationToken ct) => _mediator.Send(query, ct);
+        CancellationToken ct)
+    {
+        var result = await _mediator.Send(query, ct);
+        return Ok(result);
+    }
 }

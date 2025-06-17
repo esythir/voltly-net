@@ -5,20 +5,28 @@
     <IsPackable>false</IsPackable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- Test framework -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Moq" />
 
     <!-- EF Core (para os testes de integração) -->
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
     <PackageReference Include="Oracle.EntityFrameworkCore" />
 
     <!-- Testcontainers -->
@@ -27,9 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Voltly.Api\Voltly.Api.csproj" />
     <ProjectReference Include="..\Voltly.Application\Voltly.Application.csproj" />
-    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
     <ProjectReference Include="..\Voltly.Domain\Voltly.Domain.csproj" />
+    <ProjectReference Include="..\Voltly.Infrastructure\Voltly.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

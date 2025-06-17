@@ -28,7 +28,7 @@ INSERT INTO TB_USERS
  "Role", "IsActive", "CreatedAt", "UpdatedAt")
 VALUES ('Professor User',
         'user@voltly.dev',
-        '$2b$11$0AWGF8lvlB2EKU82Xqp2ueL/OXo8OvaW7HkB03JrSRZJ8sg19xcj6',
+        '$2a$11$1Na7QX2kqfNTvfhoKqeEd.fXt.tbCcaK0zUMzgygUJmP6FUU/N1sG',
         DATE '1990-01-01',
         'USER',
         1,

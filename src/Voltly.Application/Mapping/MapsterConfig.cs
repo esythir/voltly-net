@@ -2,6 +2,7 @@ using Mapster;
 using Voltly.Domain.Entities;
 using Voltly.Application.DTOs;
 using Voltly.Application.Mapping.Profiles;
+using Voltly.Application.DTOs.Equipments;
 
 namespace Voltly.Application.Mapping;
 
@@ -24,11 +25,14 @@ public static class MapsterConfig
         cfg.NewConfig<User,             UserDto>()
             .IgnoreNullValues(true);
         
-        
-        // (Opcional) DTO → Entidade para Commands de criação/atualização
-        // ex:
-        // cfg.NewConfig<CreateEquipmentDto, Equipment>()
-        //    .Map(dest => dest.Id, src => 0)
-        //    .IgnoreNonMapped(true);
+        cfg.NewConfig<Equipment,               EquipmentResponse>();
+        cfg.NewConfig<CreateEquipmentRequest,  Equipment>()
+            .Ignore(e => e.Id)
+            .Ignore(e => e.Sensors)
+            .Ignore(e => e.Owner)
+            .Map  (e => e.Active,     _ => true);
+        cfg.NewConfig<UpdateEquipmentRequest,  Equipment>()
+            .IgnoreNullValues(true);
+
     }
 }
